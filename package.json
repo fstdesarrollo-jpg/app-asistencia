@@ -1,0 +1,14 @@
+{
+  "name": "fst-asistencia-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/api",
+    "functions"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w fst-asistencia-web",
+    "build": "npm run build -w fst-asistencia-web",
+    "lint": "npm run lint -w fst-asistencia-web"
+  }
+}

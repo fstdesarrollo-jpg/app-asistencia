@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "asistencias",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "madreDocumento", "order": "ASCENDING" },
+        { "fieldPath": "fechaRegistro", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "asistencias",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "reunionId", "order": "ASCENDING" },
+        { "fieldPath": "bloqueId", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

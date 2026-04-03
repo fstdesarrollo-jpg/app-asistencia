@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'administrador';
+    }
+    function isProfessional() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'profesional';
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    match /madres/{id} {
+      allow read: if signedIn() && (isAdmin() || isProfessional());
+      allow write: if signedIn() && isAdmin();
+    }
+
+    match /profesionales/{id} {
+      allow read: if signedIn() && (isAdmin() || isProfessional());
+      allow write: if signedIn() && isAdmin();
+    }
+
+    match /reuniones/{id} {
+      allow read: if signedIn() && (isAdmin() || isProfessional());
+      allow create, update: if signedIn() && (isAdmin() || isProfessional());
+      allow delete: if signedIn() && isAdmin();
+    }
+
+    match /asistencias/{id} {
+      allow read: if signedIn() && (isAdmin() || isProfessional());
+      allow create, update: if signedIn() && (isAdmin() || isProfessional());
+    }
+
+    match /alertasLog/{id} {
+      allow read: if signedIn() && (isAdmin() || isProfessional());
+      allow create: if signedIn() && (isAdmin() || isProfessional());
+    }
+
+    match /alertasProgramadas/{id} {
+      allow read: if signedIn() && (isAdmin() || isProfessional());
+      allow write: if signedIn() && (isAdmin() || isProfessional());
+    }
+
+    match /systemLogs/{id} {
+      allow read: if signedIn() && isAdmin();
+      allow create: if signedIn();
+    }
+
+    match /alertasDedupe/{id} {
+      allow read, write: if signedIn() && (isAdmin() || isProfessional());
+    }
+  }
+}
